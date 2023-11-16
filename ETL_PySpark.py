@@ -30,10 +30,14 @@ def dropfirstrow(index, iterator):
 
 rdd = players_21.rdd
 
-# print(rdd.collect())
+# recopilacion = rdd.collect()
+# print(recopilacion)
 print("Paso 5")
-# dropfirstrow()
+
 rdd = rdd.mapPartitionsWithIndex(dropfirstrow)
+
+# recopilacion = rdd.collect() #Esto no va 
+
 print("Paso 6")
 schema = StructType([
     StructField("name",StringType(),False),
@@ -48,15 +52,34 @@ schema = StructType([
 print("Paso 7")
 dataframe = sqlcontext.createDataFrame (rdd,schema)
 dataframe.printSchema()
-print(dataframe)
+# print(dataframe)
 
 print("Paso 8")
-# dataframe = dataframe.dropna()
+dataframe = dataframe.dropna()
 
-# dataframe = dataframe.withColumn("PAC",col("PAC").cast(IntegerType()))
-# dataframe = dataframe.withColumn("SHO",col("SHO").cast(IntegerType()))
-# dataframe = dataframe.withColumn("PAS",col("PAS").cast(IntegerType()))
-# dataframe = dataframe.withColumn("DRI",col("DRI").cast(IntegerType()))
-# dataframe = dataframe.withColumn("DEF",col("DEF").cast(IntegerType()))
-# dataframe = dataframe.withColumn("PHY",col("PHY").cast(IntegerType()))
+dataframe = dataframe.withColumn("PAC",col("PAC").cast(IntegerType()))
+dataframe = dataframe.withColumn("SHO",col("SHO").cast(IntegerType()))
+dataframe = dataframe.withColumn("PASS",col("PASS").cast(IntegerType()))
+dataframe = dataframe.withColumn("DRI",col("DRI").cast(IntegerType()))
+dataframe = dataframe.withColumn("DEF",col("DEF").cast(IntegerType()))
+dataframe = dataframe.withColumn("PHY",col("PHY").cast(IntegerType()))
 
+dataframe.printSchema()
+
+print("Paso 9")
+
+dataframe = dataframe.withColumn("mean", ((col("PAC") + col("SHO") + col("PASS") + col("DRI") + col("DEF") + col("PHY")) / lit(6)))
+
+print("DATAFRAME con columna nueva")
+print(dataframe)
+
+
+
+print("Paso 10")
+
+dataframe = dataframe.repartition(1).write.csv("output.cvs", sep=",")
+
+# spark.read.csv("output.csv")
+final = pyspark.read.csv("output.csv")
+print(final)
+print("Paso 11")
