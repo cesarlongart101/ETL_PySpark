@@ -37,7 +37,7 @@ rdd = players_21.rdd
 # rdd.collect()
 # recopilacion = rdd.collect()
 # print(recopilacion)
-print(rdd.collect())
+# print(rdd.collect())
 
 
 print("Paso 5")
