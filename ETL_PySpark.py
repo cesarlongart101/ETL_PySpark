@@ -1,9 +1,12 @@
 import pyspark
+import pandas as pd
 from IPython.display import display 
 from pyspark.sql import SparkSession, SQLContext
 from pyspark.sql.types import IntegerType, StringType, StructType, StructField
 from pyspark.sql.functions import col, lit
 from pyspark import RDD
+
+
 
 spark = SparkSession.builder.appName("etl_datos").getOrCreate()
 # spark = SparkSession.builder.appName("etl_datos").config("spark.sql.debug.maxToStringFields", "10").getOrCreate()
@@ -72,7 +75,9 @@ print("Paso 7")
 dataframe = sqlContext.createDataFrame(rdd,schema)
 dataframe.printSchema()
 # dataframe = dataframe.select('name', 'Positition','PAC','SHO','PASS','DRI','DEF','PHY')
-dataframe.show()
+
+#CUANDO MANDO A IMPRIMIR EL DATAFRAME ROMPE
+# dataframe.show()
 
 print("Paso 8")
 #Elimina los valores nulos o NAN 42:50
@@ -81,6 +86,7 @@ print("Paso 8")
 # cambia los valores nulos en ceros de cada row
 dataframe = dataframe.fillna(0)
 
+print("Paso 8.1")
 #convertir los datos del dataframe de string a integer 43:35
 dataframe = dataframe.withColumn("PAC",col("PAC").cast(IntegerType()))
 dataframe = dataframe.withColumn("SHO",col("SHO").cast(IntegerType()))
@@ -100,16 +106,23 @@ dataframe.printSchema()
 
 print("Paso 9")
 #calcular el promedio de los valores de los jugadores 47:50
-# dataframe = dataframe.withColumn("mean", ((col("PAC") + col("SHO") + col("PASS") + col("DRI") + col("DEF") + col("PHY")) / lit(6)))
-dataframe = dataframe.withColumn("mean", ((col("_c37") + col("_c38") + col("_c39") + col("_c40") + col("_c41") + col("_c42")) / lit(6)))
+dataframe = dataframe.withColumn("mean", ((col("PAC") + col("SHO") + col("PASS") + col("DRI") + col("DEF") + col("PHY")) / lit(6)))
+# dataframe = dataframe.withColumn("mean", ((col("_c37") + col("_c38") + col("_c39") + col("_c40") + col("_c41") + col("_c42")) / lit(6)))
 
 print("DATAFRAME con columna nueva")
 print(dataframe) #solo se imprime la estructira, así es el tutorial
-dataframe.show()
+
+#AQUÍ ROMPE TAMBIEN AL PEDIR QUE IMPRIMA EL DATAFRAME CON DATAFRAME.SHOW
+print("Paso 9.1")
+# dataframe.show()
+print(dataframe)
 print("Paso 10")
+display(dataframe)
+print("Paso 10.1")
+
 
 #exportar un archivo csv con los datos del dataframe 51:56
-dataframe = dataframe.repartition(1).write.csv("output.cvs", sep=",")
+# dataframe = dataframe.repartition(1).write.csv("output.cvs", sep=",")
 
 # # spark.read.csv("output.csv")
 # final = pyspark.read.csv("output.csv")
