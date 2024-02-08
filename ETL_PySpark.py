@@ -1,3 +1,4 @@
+import findspark
 import pyspark
 import pandas as pd
 from IPython.display import display 
@@ -6,12 +7,19 @@ from pyspark.sql.types import IntegerType, StringType, StructType, StructField
 from pyspark.sql.functions import col, lit
 from pyspark import RDD
 
+findspark.init()
 
 
 spark = SparkSession.builder.appName("etl_datos").getOrCreate()
 # spark = SparkSession.builder.appName("etl_datos").config("spark.sql.debug.maxToStringFields", "10").getOrCreate()
 sqlContext = SQLContext(spark)
 print("Paso 1")
+
+df = spark.createDataFrame([
+    (14, "Tom"), (23, "Alice"), (16, "Bob")], ["age", "name"])
+
+df.show(2)
+
 
 path = "./Dataset_ETL_Pyspark/"
 players_21 = spark.read.csv(path+"players_21.csv")
@@ -112,9 +120,9 @@ dataframe = dataframe.withColumn("mean", ((col("PAC") + col("SHO") + col("PASS")
 print("DATAFRAME con columna nueva")
 print(dataframe) #solo se imprime la estructira, así es el tutorial
 
-#AQUÍ ROMPE TAMBIEN AL PEDIR QUE IMPRIMA EL DATAFRAME CON DATAFRAME.SHOW
+#AQUÍ ROMPE TAMBIEN AL PEDIR QUE IMPRIMA EL DATAFRAME CON DATAFRAME.SHOW()
 print("Paso 9.1")
-# dataframe.show()
+dataframe.show()
 print(dataframe)
 print("Paso 10")
 display(dataframe)
@@ -122,7 +130,7 @@ print("Paso 10.1")
 
 
 #exportar un archivo csv con los datos del dataframe 51:56
-# dataframe = dataframe.repartition(1).write.csv("output.cvs", sep=",")
+# dataframe = dataframe.repartition(1).write.csv("output.csv", sep=",")
 
 # # spark.read.csv("output.csv")
 # final = pyspark.read.csv("output.csv")

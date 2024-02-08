@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: test
+Version: 0.0.0
+Author: test
+Requires-Dist: pyspark
+Requires-Dist: pandas
+Requires-Dist: IPython
