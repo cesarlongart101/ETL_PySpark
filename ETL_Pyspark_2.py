@@ -11,7 +11,10 @@ SpSession = SparkSession \
     .appName("etl_ventas") \
     .getOrCreate()
 
-SpContext = SQLContext(SpSession)
+# SpContext = SQLContext(SpSession)
+# SpContext = SpSession.SparkContext
+SpContext = SpSession.sparkContext
+
 
 data = SpSession.read.csv('./Dataset_ETL_Pyspark/Ventas.csv', header = True, sep=';')
 # data.show(truncate=False)
