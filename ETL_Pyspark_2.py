@@ -13,7 +13,7 @@ SpSession = SparkSession \
 
 # SpContext = SQLContext(SpSession)
 # SpContext = SpSession.SparkContext
-SpContext = SpSession.sparkContext
+# SpContext = SpSession.sparkContext
 
 
 data = SpSession.read.csv('./Dataset_ETL_Pyspark/Ventas.csv', header = True, sep=';')
