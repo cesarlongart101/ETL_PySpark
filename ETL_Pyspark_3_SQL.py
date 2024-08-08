@@ -13,12 +13,12 @@ findspark.find()
 #     .appName("etl_ventas") \
 #     .getOrCreate()
 
-# spark = SparkSession.builder \
-#     .appName("SQL_Prueba") \
-#     .config("spark.some.config.option", "some-value") \
-#     .getOrCreate()
+spark = SparkSession.builder \
+    .appName("SQL_Prueba") \
+    .config("spark.some.config.option", "some-value") \
+    .getOrCreate()
 
-# spark = SparkSession.builder.getOrCreate()
+spark = SparkSession.builder.getOrCreate()
 
 df = spark.read.format("jdbc") \
     .option("url", "jdbc:sqlserver://DESKTOP-46PH49A\SQLEXPRESS:1433;database=DGT_SQL_PRUEBA") \
